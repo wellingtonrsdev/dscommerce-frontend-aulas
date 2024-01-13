@@ -2,7 +2,7 @@ import './styles.css';
 
 export default function Login() {
 
-  return(
+  return (
      <main>
       <section id="login-section" className="dsc-container">
         <div className="dsc-login-form-container">
