@@ -3,6 +3,7 @@ import QueryString from "qs";
 import { CredentialsDTO } from "../models/auth";
 import { requestBackend } from "../utils/requests";
 import { CLIENT_ID, CLIENT_SECRET } from "../utils/system";
+import * as accessTokenRepository from "../localStorage/access-token-repository";
 
 export function loginRequest(loginData: CredentialsDTO) {
   const headers = {
@@ -12,16 +13,27 @@ export function loginRequest(loginData: CredentialsDTO) {
 
   const requestBody = QueryString.stringify({
     ...loginData,
-    grant_type: "password"
+    grant_type: "password",
   });
 
   const config: AxiosRequestConfig = {
     method: "POST",
     url: "/oauth/token",
     data: requestBody,
-    headers
+    headers,
   };
 
   return requestBackend(config);
+}
 
+export function logout() {
+  accessTokenRepository.remove();
+}
+
+export function saveAccessToken(token: string) {
+  accessTokenRepository.save(token);
+}
+
+export function getAccessToken() {
+  accessTokenRepository.get();
 }
