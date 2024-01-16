@@ -2,11 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import jwtDecode from "jwt-decode";
 import QueryString from "qs";
 import * as accessTokenRepository from "../localStorage/access-token-repository";
-import {
-  AccessTokenPayloadDTO,
-  CredentialsDTO,
-  RoleEnum,
-} from "../models/auth";
+import { AccessTokenPayloadDTO, CredentialsDTO, RoleEnum } from "../models/auth";
 import { requestBackend } from "../utils/requests";
 import { CLIENT_ID, CLIENT_SECRET } from "../utils/system";
 
