@@ -3,7 +3,6 @@ import ButtonNextPage from "../../../components/ButtonNextPage";
 import CatalogCard from "../../../components/CatalogCard";
 import SearchBar from "../../../components/SearchBar";
 import { ProductDTO } from "../../../models/product";
-import { isAuthenticated } from "../../../services/auth-service";
 import * as productService from "../../../services/product-service";
 import "./styles.css";
 
@@ -13,8 +12,7 @@ type QueryParams = {
 };
 
 export default function Catalog() {
-
-  const[isLastPage, setIsLastPage] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const [products, setProducts] = useState<ProductDTO[]>([]);
 
@@ -24,9 +22,6 @@ export default function Catalog() {
   });
 
   useEffect(() => {
-
-    console.log("AUTENTICADO", isAuthenticated());
-
     productService
       .findPageRequest(queryParams.page, queryParams.name)
       .then((response) => {
@@ -56,12 +51,11 @@ export default function Catalog() {
           ))}
         </div>
 
-        {
-          !isLastPage &&
+        {!isLastPage && (
           <div onClick={handleNextPageClick}>
             <ButtonNextPage />
           </div>
-        }
+        )}
       </section>
     </main>
   );
