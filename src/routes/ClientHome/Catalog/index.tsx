@@ -3,6 +3,7 @@ import ButtonNextPage from "../../../components/ButtonNextPage";
 import CatalogCard from "../../../components/CatalogCard";
 import SearchBar from "../../../components/SearchBar";
 import { ProductDTO } from "../../../models/product";
+import { isAuthenticated } from "../../../services/auth-service";
 import * as productService from "../../../services/product-service";
 import "./styles.css";
 
@@ -23,6 +24,9 @@ export default function Catalog() {
   });
 
   useEffect(() => {
+
+    console.log("AUTENTICADO", isAuthenticated());
+
     productService
       .findPageRequest(queryParams.page, queryParams.name)
       .then((response) => {

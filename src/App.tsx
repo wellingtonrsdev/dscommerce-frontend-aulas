@@ -15,9 +15,7 @@ export default function App() {
   const [contextCartCount, setContextCartCount] = useState<number>(0);
 
   return (
-    <ContextCartCount.Provider
-      value={{ contextCartCount, setContextCartCount }}
-    >
+    <ContextCartCount.Provider value={{ contextCartCount, setContextCartCount }} >
       <HistoryRouter history={history}>
         <Routes>
           <Route path="/" element={<ClientHome />}>
