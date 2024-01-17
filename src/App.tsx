@@ -7,14 +7,14 @@ import AdminHome from "./routes/Admin/AdminHome";
 import ClientHome from "./routes/ClientHome";
 import Cart from "./routes/ClientHome/Cart";
 import Catalog from "./routes/ClientHome/Catalog";
+import Confirmation from "./routes/ClientHome/Confirmation";
 import Login from "./routes/ClientHome/Login";
 import ProductDetails from "./routes/ClientHome/ProductDetails";
+import * as authService from "./services/auth-service";
+import * as cartService from "./services/cart-service";
 import { ContextCartCount } from "./utils/context-cart";
 import { ContextToken } from "./utils/context-token";
 import { history } from "./utils/history";
-import * as authService from "./services/auth-service";
-import * as cartService from "./services/cart-service";
-import Confirmation from "./routes/ClientHome/Confirmation";
 
 export default function App() {
   const [contextCartCount, setContextCartCount] = useState<number>(0);
@@ -42,7 +42,7 @@ export default function App() {
               <Route path="product-details/:productId" element={<ProductDetails />} />
               <Route path="cart" element={<Cart />} />
               <Route path="login" element={<Login />} />
-              <Route path="confirmation/:orderId" element={<Confirmation />} />
+              <Route path="confirmation/:orderId" element={<PrivateRoute><Confirmation /></PrivateRoute> } />
             </Route>
             <Route path="/admin/" element={<PrivateRoute roles={["ROLE_ADMIN"]}><Admin /></PrivateRoute>} >
               <Route index element={<AdminHome />} />
