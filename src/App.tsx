@@ -4,6 +4,8 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { AccessTokenPayloadDTO } from "./models/auth";
 import Admin from "./routes/Admin";
 import AdminHome from "./routes/Admin/AdminHome";
+import ProductForm from "./routes/Admin/ProductForm";
+import ProductListing from "./routes/Admin/ProductListing";
 import ClientHome from "./routes/ClientHome";
 import Cart from "./routes/ClientHome/Cart";
 import Catalog from "./routes/ClientHome/Catalog";
@@ -32,8 +34,12 @@ export default function App() {
     }, []);
 
   return (
-    <ContextToken.Provider value={{ contextTokenPayload, setContextTokenPayload }} >
-      <ContextCartCount.Provider value={{ contextCartCount, setContextCartCount }} >
+    <ContextToken.Provider
+      value={{ contextTokenPayload, setContextTokenPayload }}
+    >
+      <ContextCartCount.Provider
+        value={{ contextCartCount, setContextCartCount }}
+      >
         <HistoryRouter history={history}>
           <Routes>
             <Route path="/" element={<ClientHome />}>
@@ -42,10 +48,13 @@ export default function App() {
               <Route path="product-details/:productId" element={<ProductDetails />} />
               <Route path="cart" element={<Cart />} />
               <Route path="login" element={<Login />} />
-              <Route path="confirmation/:orderId" element={<PrivateRoute><Confirmation /></PrivateRoute> } />
+              <Route path="confirmation/:orderId" element={<PrivateRoute><Confirmation /></PrivateRoute>} />
             </Route>
             <Route path="/admin/" element={<PrivateRoute roles={["ROLE_ADMIN"]}><Admin /></PrivateRoute>} >
-              <Route index element={<AdminHome />} />
+              <Route index element={<Navigate to="/admin/home" />} />
+              <Route path="home" element={<AdminHome />} />
+              <Route path="products" element={<ProductListing />} />
+              <Route path="products/:productId" element={<ProductForm />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
