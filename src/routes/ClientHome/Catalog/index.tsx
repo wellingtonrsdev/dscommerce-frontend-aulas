@@ -12,7 +12,7 @@ type QueryParams = {
 };
 
 export default function Catalog() {
-  
+
   const [isLastPage, setIsLastPage] = useState(false);
 
   const [products, setProducts] = useState<ProductDTO[]>([]);
@@ -46,16 +46,17 @@ export default function Catalog() {
         <SearchBar onSearch={handleSearch} />
 
         <div className="dsc-catalog-cards dsc-mb20 dsc-mt20">
-          {products.map((product) => (
-            <CatalogCard key={product.id} product={product} />
-          ))}
+          {
+            products.map(
+              product => <CatalogCard key={product.id} product={product} />
+            )
+          }
         </div>
 
-        {!isLastPage && (
-          <div onClick={handleNextPageClick}>
-            <ButtonNextPage />
-          </div>
-        )}
+        {
+          !isLastPage &&
+          <ButtonNextPage onNextPage={handleNextPageClick} />
+        }
       </section>
     </main>
   );
