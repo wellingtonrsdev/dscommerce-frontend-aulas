@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ProductDTO } from "../../../models/product";
 import SearchBar from "../../../components/SearchBar";
 import ButtonNextPage from "../../../components/ButtonNextPage";
+import DialogInfo from "../../../components/DialogInfo";
 
 type QueryParams = {
   page: number;
@@ -73,7 +74,7 @@ export default function ProductListing() {
                   <td className="dsc-tb768">R$ {product.price.toFixed(2)}</td>
                   <td className="dsc-txt-left">{product.name}</td>
                   <td><img className="dsc-product-listing-btn" src={editIcon} alt="Editar"/></td>
-                  <td>{" "}<img className="dsc-product-listing-btn" src={deleteIcon} alt="Deletar"/></td>
+                  <td><img className="dsc-product-listing-btn" src={deleteIcon} alt="Deletar"/></td>
                 </tr>
               ))
             }
@@ -86,6 +87,7 @@ export default function ProductListing() {
         }
 
       </section>
+      <DialogInfo />
     </main>
   );
 }
