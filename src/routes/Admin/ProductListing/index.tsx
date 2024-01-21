@@ -22,6 +22,7 @@ export default function ProductListing() {
   });
 
   const [dialogConfirmationData, setDialogConfirmationData] = useState({
+    id: 0,
     visible: false,
     message: "Tem certeza?",
   });
