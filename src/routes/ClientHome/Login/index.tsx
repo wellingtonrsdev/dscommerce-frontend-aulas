@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as authService from '../../../services/auth-service';
+import *  as forms from '../../../utils/forms';
 import { ContextToken } from "../../../utils/context-token";
 import "./styles.css";
 import FormInput from "../../../components/FormInput";
@@ -48,9 +49,7 @@ const [formData, setFormData] = useState<any>({
   }
 
   function handleInputChange(event: any) {
-    const value = event.target.value;
-    const name = event.target.name;
-    setFormData({ ...formData, [name]: {...formData[name], value: value} });
+    setFormData(forms.update(formData, event.target.name, event.target.value));
   }
 
   return (
