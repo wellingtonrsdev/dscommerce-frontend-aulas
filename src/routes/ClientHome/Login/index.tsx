@@ -49,9 +49,15 @@ const [formData, setFormData] = useState<any>({
       })
   }
 
-  function handleInputChange(event: any) {
-    setFormData(forms.update(formData, event.target.name, event.target.value));
-  }
+    function handleInputChange(event: any) {
+      setFormData(
+        forms.updateAndValidate(formData, event.target.name, event.target.value)
+      );
+    }
+
+    function handleTurnDirty(name: string) {
+      setFormData(forms.dirtyAndValidate(formData, name));
+    }
 
   return (
     <main>
@@ -62,16 +68,18 @@ const [formData, setFormData] = useState<any>({
             <div className="dsc-form-controls-container">
               <div>
                 <FormInput
-                  { ...formData.username }
+                  {...formData.username}
                   className="dsc-form-control"
+                  onTurnDirty={handleTurnDirty}
                   onChange={handleInputChange}
                 />
                 <div className="dsc-form-error"></div>
               </div>
               <div>
                 <FormInput
-                  { ...formData.password }
+                  {...formData.password}
                   className="dsc-form-control"
+                  onTurnDirty={handleTurnDirty}
                   onChange={handleInputChange}
                 />
               </div>
