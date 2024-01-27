@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FormInput from "../../../components/FormInput";
 import FormSelect from "../../../components/FormSelect";
 import FormTextArea from "../../../components/FormTextArea";
@@ -11,10 +11,11 @@ import "./styles.css";
 import { selectStyles } from "../../../utils/select";
 
 export default function ProductForm() {
-
   const params = useParams();
 
-  const isEditing = params.productId !== 'create';
+  const navigate = useNavigate();
+
+  const isEditing = params.productId !== "create";
 
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
 
@@ -25,10 +26,10 @@ export default function ProductForm() {
       name: "name",
       type: "text",
       placeholder: "Nome",
-      validation: function(value: string) {
+      validation: function (value: string) {
         return /^.{3,80}$/.test(value);
       },
-      message: "Favor informar um nome de 3 a 80 caracteres"
+      message: "Favor informar um nome de 3 a 80 caracteres",
     },
     price: {
       value: "",
@@ -36,10 +37,10 @@ export default function ProductForm() {
       name: "price",
       type: "number",
       placeholder: "Preço",
-      validation: function(value: any) {
+      validation: function (value: any) {
         return Number(value) > 0;
       },
-      message: "Favor informar um valor positivo"
+      message: "Favor informar um valor positivo",
     },
     imgUrl: {
       value: "",
@@ -54,58 +55,70 @@ export default function ProductForm() {
       name: "description",
       type: "text",
       placeholder: "Descrição",
-      validation: function(value: string) {
+      validation: function (value: string) {
         return /^.{10,}$/.test(value);
       },
-      message: "A descrição deve ter pelo menos 10 caracteres"
+      message: "A descrição deve ter pelo menos 10 caracteres",
     },
     categories: {
       value: [],
       id: "categories",
       name: "categories",
       placeholder: "Categorias",
-      validation: function(value: CategoryDTO[]) {
+      validation: function (value: CategoryDTO[]) {
         return value.length > 0;
       },
-      message: "Escolha ao menos uma categoria"
-    }
+      message: "Escolha ao menos uma categoria",
+    },
   });
 
   useEffect(() => {
-    categoryService.findAllRequest()
-      .then(response => {
-        setCategories(response.data);
-      });
+    categoryService.findAllRequest().then((response) => {
+      setCategories(response.data);
+    });
   }, []);
 
   useEffect(() => {
     if (isEditing) {
-      productService.findById(Number(params.productId))
-        .then(response => {
-          const newFormData = forms.updateAll(formData, response.data);
-          setFormData(newFormData);
-        })
+      productService.findById(Number(params.productId)).then((response) => {
+        const newFormData = forms.updateAll(formData, response.data);
+        setFormData(newFormData);
+      });
     }
   }, []);
 
-    function handleInputChange(event: any) {
-      setFormData(forms.updateAndValidate(formData, event.target.name, event.target.value));
+  function handleInputChange(event: any) {
+    setFormData(
+      forms.updateAndValidate(formData, event.target.name, event.target.value)
+    );
+  }
+
+  function handleTurnDirty(name: string) {
+    setFormData(forms.dirtyAndValidate(formData, name));
+  }
+
+  function handleSubmit(event: any) {
+    event.preventDefault();
+
+    const formDataValidated = forms.dirtyAndValidateAll(formData);
+    if (forms.hasAnyInvalid(formDataValidated)) {
+      setFormData(formDataValidated);
+      return;
     }
 
-    function handleTurnDirty(name: string) {
-      setFormData(forms.dirtyAndValidate(formData, name));
+    const requestBody = forms.toValues(formData);
+    if (isEditing) {
+      requestBody.id = params.productId;
     }
 
-    function handleSubmit(event: any) {
-      event.preventDefault();
+    const request = isEditing
+      ? productService.updateRequest(requestBody)
+      : productService.insertRequest(requestBody);
 
-      const formDataValidated = forms.dirtyAndValidateAll(formData);
-      if (forms.hasAnyInvalid(formDataValidated)) {
-        setFormData(formDataValidated);
-        return;
-      }
-      //console.log(forms.toValues(formData));
-    }
+    request.then(() => {
+      navigate("/admin/products");
+    });
+  }
 
   return (
     <main>
